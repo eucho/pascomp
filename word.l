@@ -1,4 +1,4 @@
-%{
+ï»¿%{
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -13,11 +13,10 @@ extern char id_str[STRING_MAX];
 
 int yywrap(void);
 int i;
-int no;//·ûºÅ±àºÅ
+int no;//ç¬¦å·ç¼–å·
 %}
 
-/////////////////////////////////////////////////////////////////////////////
-/*Õı¹æ¶¨ÒåÊ½*/
+/*æ­£è§„å®šä¹‰å¼*/
 
 white [ \t\n]
 letter [a-zA-Z]
@@ -30,11 +29,10 @@ num {digits}{optional_fraction}{optional_exponent}
 %x COMMENT1
 %x COMMENT2
 %%
-/////////////////////////////////////////////////////////////////////////////
-/*¹æÔò²¿·Ö*/
+/*è§„åˆ™éƒ¨åˆ†*/
 
 
-//×¢ÊÍ
+//æ³¨é‡Š
 \{                 {;;BEGIN COMMENT1;}
 <COMMENT1>\}       {;;BEGIN 0;}
 <COMMENT1>\n       {;;}
@@ -45,7 +43,7 @@ num {digits}{optional_fraction}{optional_exponent}
 <COMMENT2>\n       {;;}
 <COMMENT2>[^"*/"]+ {;;}
 
-//¹Ø¼ü×Ö
+//å…³é”®å­—
 [aA][nN][dD]						 {;;no = AND;return (MULOP);}
 [aA][rR][rR][aA][yY]				 {;;return (ARRAY);}
 [bB][eE][gG][iI][nN]				 {;;return (PBEGIN);}
@@ -71,7 +69,7 @@ num {digits}{optional_fraction}{optional_exponent}
 [wW][hH][iI][lL][eE]				 {;;return (WHILE);}
 [wW][rR][iI][tT][eE]				 {;;return (WRITE);}
 
-//×¨ÓÃ·ûºÅ
+//ä¸“ç”¨ç¬¦å·
 "+"			 {;;no = ADD;return (ADDOP);}
 "-"			 {;;no = SUB;return (ADDOP);}
 "*"			 {;;no = MUL;return (MULOP);}
@@ -93,27 +91,26 @@ num {digits}{optional_fraction}{optional_exponent}
 ","          {;;return (',');}
 ";"          {;;return (';');}
 ":"          {;;return (':');}
-//¿Õ°×
+//ç©ºç™½
 {white}+		   {
 					;;					
 				   }
 
-//±êÊ¶·û
+//æ ‡è¯†ç¬¦
 {id}			   {
                     ;;
                     strcpy(id_str,yytext);
                     return (ID);
                    }
 			
-//Êı×Ö
+//æ•°å­—
 {num}			   {
 					;;
 					push(yytext);
 					return (NUM);
 				   }
 %%
-/////////////////////////////////////////////////////////////////////////////
-/*¸¨Öú¹ı³Ì*/
+/*è¾…åŠ©è¿‡ç¨‹*/
 #ifndef yywrap
  int yywrap(){return 1;}
 #endif

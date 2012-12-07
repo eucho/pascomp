@@ -1,4 +1,4 @@
-%{
+ï»¿%{
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -23,85 +23,85 @@ extern int yylineno;
 extern int no;
 
 
-//±äÁ¿²¿·Ö===============================================================================================
+//å˜é‡éƒ¨åˆ†===============================================================================================
 
-FILE* fout;//Êä³öÎÄ¼þÖ¸Õë
-FILE* hout;//Êä³ö.hÎÄ¼þÖ¸Õë
-FILE* tout;//Êä³ö·ûºÅ±íÎÄ¼þÖ¸Õë
-int struct_no;//Îªrecord·­ÒëÎªstruct½á¹¹Ê±Ê¹ÓÃµÄ±àºÅ£¬Ã¿¸östructÓÐÎ¨Ò»µÄ±êÊ¶
-int num1,num2;//ÓÃÓÚ"NUM .. NUM"µÄÇé¿ö
-int cur_fptr_position;//ÓÃÓÚ´æ·ÅÊä³ö.hÎÄ¼þÖ¸Õëµ±Ç°Î»ÖÃ
-int fptr_offset;//ÓÃÓÚ´æ·Åcur_fptr_positionÓëÊä³ö.hÎÄ¼þÖ¸Õëµ±Ç°Î»ÖÃµÄ²îÖµ
-int spc;//ÓÃÓÚÊä³öÖ¸¶¨ÊýÁ¿µÄ¿Õ¸ñÊ±
+FILE* fout;//è¾“å‡ºæ–‡ä»¶æŒ‡é’ˆ
+FILE* hout;//è¾“å‡º.hæ–‡ä»¶æŒ‡é’ˆ
+FILE* tout;//è¾“å‡ºç¬¦å·è¡¨æ–‡ä»¶æŒ‡é’ˆ
+int struct_no;//ä¸ºrecordç¿»è¯‘ä¸ºstructç»“æž„æ—¶ä½¿ç”¨çš„ç¼–å·ï¼Œæ¯ä¸ªstructæœ‰å”¯ä¸€çš„æ ‡è¯†
+int num1,num2;//ç”¨äºŽ"NUM .. NUM"çš„æƒ…å†µ
+int cur_fptr_position;//ç”¨äºŽå­˜æ”¾è¾“å‡º.hæ–‡ä»¶æŒ‡é’ˆå½“å‰ä½ç½®
+int fptr_offset;//ç”¨äºŽå­˜æ”¾cur_fptr_positionä¸Žè¾“å‡º.hæ–‡ä»¶æŒ‡é’ˆå½“å‰ä½ç½®çš„å·®å€¼
+int spc;//ç”¨äºŽè¾“å‡ºæŒ‡å®šæ•°é‡çš„ç©ºæ ¼æ—¶
 int i;
-int is_function;//×´Ì¬±äÁ¿£¬±íÃ÷µ±Ç°µÄvariableÊÇ·ñÊÇº¯Êý£¬ÈôÊÇº¯Êý£¬ÔòÎªº¯ÊýÃû¸³Öµ¼´Îªreturn
-int is_logic;//×´Ì¬±äÁ¿£¬±íÃ÷µ±Ç°¶Áµ½µÄ±í´ïÊ½ÖÐµÄÔËËãÊÇ·ñÊÇÂß¼­ÔËËã£¬ÈôÊÇÔòÎª1£¬·ñÔòÎª0
-int is_const;//×´Ì¬±äÁ¿£¬±íÃ÷µ±Ç°¶Áµ½µÄfactorÊÇ·ñÎª³£Êý£¬ÈôÊÇÔòÎª1£¬·ñÔòÎª0
-int write_in_c;//×´Ì¬±äÁ¿£¬±íÃ÷µ±Ç°Ó¦Ïò.cÎÄ¼þÊä³ö»¹ÊÇÏò.hÎÄ¼þÊä³ö
-int upper_level;//×´Ì¬±äÁ¿£¬±íÃ÷µ±Ç°µÄIDÊÇÊôÓÚÉÏÒ»¼¶·ûºÅ±íµÄ
-int upper_level0;//Í¬ÉÏ
-int para,para0;//×´Ì¬±äÁ¿£¬¼ÇÂ¼µ±Ç°º¯Êý²ÎÊý¸öÊý
+int is_function;//çŠ¶æ€å˜é‡ï¼Œè¡¨æ˜Žå½“å‰çš„variableæ˜¯å¦æ˜¯å‡½æ•°ï¼Œè‹¥æ˜¯å‡½æ•°ï¼Œåˆ™ä¸ºå‡½æ•°åèµ‹å€¼å³ä¸ºreturn
+int is_logic;//çŠ¶æ€å˜é‡ï¼Œè¡¨æ˜Žå½“å‰è¯»åˆ°çš„è¡¨è¾¾å¼ä¸­çš„è¿ç®—æ˜¯å¦æ˜¯é€»è¾‘è¿ç®—ï¼Œè‹¥æ˜¯åˆ™ä¸º1ï¼Œå¦åˆ™ä¸º0
+int is_const;//çŠ¶æ€å˜é‡ï¼Œè¡¨æ˜Žå½“å‰è¯»åˆ°çš„factoræ˜¯å¦ä¸ºå¸¸æ•°ï¼Œè‹¥æ˜¯åˆ™ä¸º1ï¼Œå¦åˆ™ä¸º0
+int write_in_c;//çŠ¶æ€å˜é‡ï¼Œè¡¨æ˜Žå½“å‰åº”å‘.cæ–‡ä»¶è¾“å‡ºè¿˜æ˜¯å‘.hæ–‡ä»¶è¾“å‡º
+int upper_level;//çŠ¶æ€å˜é‡ï¼Œè¡¨æ˜Žå½“å‰çš„IDæ˜¯å±žäºŽä¸Šä¸€çº§ç¬¦å·è¡¨çš„
+int upper_level0;//åŒä¸Š
+int para,para0;//çŠ¶æ€å˜é‡ï¼Œè®°å½•å½“å‰å‡½æ•°å‚æ•°ä¸ªæ•°
 typedef struct listsnode
 {
     char name[STRING_MAX], type[STRING_MAX];
     int  define, appear[ARRAY_MAX],atop;
     struct list * list;
-} ListNode;//·ûºÅ±íµ¥Ôª
+} ListNode;//ç¬¦å·è¡¨å•å…ƒ
 typedef struct list
 {
-     int top;//·ûºÅ±íµ±Ç°¿ÉÓÃÎ»
-     ListNode table[LIST_SIZE];//·ûºÅ±í
-} List; //·ûºÅ±í½á¹¹
+     int top;//ç¬¦å·è¡¨å½“å‰å¯ç”¨ä½
+     ListNode table[LIST_SIZE];//ç¬¦å·è¡¨
+} List; //ç¬¦å·è¡¨ç»“æž„
     
-List main_list;//Ö÷·ûºÅ±í
+List main_list;//ä¸»ç¬¦å·è¡¨
 
-char stack[STACK_SIZE][STRING_MAX];//Óë·ÖÎöÕ»Æ½ÐÐµÄÁÙÊ±Õ»
-int top;//ÁÙÊ±Õ»Õ»¶¥Î»ÖÃ
-int cur_top;//´æ·Åµ÷ÓÃfout_id_listº¯ÊýÇ°Õ»¶¥µÄÎ»ÖÃ
-char top_str[STRING_MAX];//µ÷ÓÃpop()º¯ÊýÊ±µ¯³öµÄÁÙÊ±Õ»Õ»¶¥
-char number[STRING_MAX];//ÓÃÓÚÊý×Ö×ª×Ö·û´®Ê±
-char id_str[STRING_MAX];//ÓÃÓÚ½«ID²åÈëµ½·ûºÅ±íÊ±
+char stack[STACK_SIZE][STRING_MAX];//ä¸Žåˆ†æžæ ˆå¹³è¡Œçš„ä¸´æ—¶æ ˆ
+int top;//ä¸´æ—¶æ ˆæ ˆé¡¶ä½ç½®
+int cur_top;//å­˜æ”¾è°ƒç”¨fout_id_listå‡½æ•°å‰æ ˆé¡¶çš„ä½ç½®
+char top_str[STRING_MAX];//è°ƒç”¨pop()å‡½æ•°æ—¶å¼¹å‡ºçš„ä¸´æ—¶æ ˆæ ˆé¡¶
+char number[STRING_MAX];//ç”¨äºŽæ•°å­—è½¬å­—ç¬¦ä¸²æ—¶
+char id_str[STRING_MAX];//ç”¨äºŽå°†IDæ’å…¥åˆ°ç¬¦å·è¡¨æ—¶
 
-List* l_stack[STACK_SIZE];//·ûºÅ±íÕ»
-List* l_top_str;//·ûºÅ±íÕ»¶¥ÔªËØ
-int l_top;//·ûºÅ±íÕ»Õ»¶¥Î»ÖÃ
+List* l_stack[STACK_SIZE];//ç¬¦å·è¡¨æ ˆ
+List* l_top_str;//ç¬¦å·è¡¨æ ˆé¡¶å…ƒç´ 
+int l_top;//ç¬¦å·è¡¨æ ˆæ ˆé¡¶ä½ç½®
 
-//ÀàÐÍ±í´ïÊ½±äÁ¿
-char type_expression[STRING_MAX];//ÀàÐÍ±í´ïÊ½×Ö·û´®£¬ÓÃÓÚ¶¨Òå±êÊ¶·ûÊ±Îª±êÊ¶·ûÊôÐÔtype×Ö·û´®¸³Öµ
-char type_exp_fp[STRING_MAX];//º¯”µ¼°¹ý³ÌµÄÀàÐÍ±í´ïÊ½×Ö·û´®
-char type_exp_r[STRING_MAX];//¼ÇÂ¼½á¹¹µÄÀàÐÍ±í´ïÊ½×Ö·û´®
-char type_exp_a[STRING_MAX];//Êý×éµÄÀàÐÍ×Ö·û´®£¨È¡ÖµÎª"int"»ò"float"£©
-char type_exp_v[STRING_MAX];//variableµÄÀàÐÍ×Ö·û´®£¬ÓÃÓÚ¸³ÖµÊ±µÄÀàÐÍ¼ì²é
+//ç±»åž‹è¡¨è¾¾å¼å˜é‡
+char type_expression[STRING_MAX];//ç±»åž‹è¡¨è¾¾å¼å­—ç¬¦ä¸²ï¼Œç”¨äºŽå®šä¹‰æ ‡è¯†ç¬¦æ—¶ä¸ºæ ‡è¯†ç¬¦å±žæ€§typeå­—ç¬¦ä¸²èµ‹å€¼
+char type_exp_fp[STRING_MAX];//å‡½æ•¸åŠè¿‡ç¨‹çš„ç±»åž‹è¡¨è¾¾å¼å­—ç¬¦ä¸²
+char type_exp_r[STRING_MAX];//è®°å½•ç»“æž„çš„ç±»åž‹è¡¨è¾¾å¼å­—ç¬¦ä¸²
+char type_exp_a[STRING_MAX];//æ•°ç»„çš„ç±»åž‹å­—ç¬¦ä¸²ï¼ˆå–å€¼ä¸º"int"æˆ–"float"ï¼‰
+char type_exp_v[STRING_MAX];//variableçš„ç±»åž‹å­—ç¬¦ä¸²ï¼Œç”¨äºŽèµ‹å€¼æ—¶çš„ç±»åž‹æ£€æŸ¥
 //=======================================================================================================
 
 
-//º¯Êý²¿·Ö===============================================================================================
+//å‡½æ•°éƒ¨åˆ†===============================================================================================
 
-/*ÁÙÊ±Õ»Ïà¹Øº¯Êý=================================*/
-int push(char* temp);//ÈëÁÙÊ±Õ»
-int pop(void);//µ¯³öÁÙÊ±Õ»Õ»¶¥
-int isEmpty(void);//ÅÐ¶ÏÁÙÊ±Õ»ÊÇ·ñÎª¿Õ
-int isReal(void);//ÅÐ¶ÏÁÙÊ±Õ»¶¥µÄÊýÊÇ·ñÎªrealÐÍ
-int fout_id_list(int type,FILE* ofile);//Êä³öIDÁÐ±í
-int test_out(int type);//²âÊÔÓÃº¯Êý£¬¸ù¾ÝtypeÖµÊä³ö¸÷ÖÖÐÅÏ¢
-int isFloat(char* number);//ÅÐ¶ÏÒ»¸öÊýÊÇ·ñÎª¸¡µãÊý
+/*ä¸´æ—¶æ ˆç›¸å…³å‡½æ•°=================================*/
+int push(char* temp);//å…¥ä¸´æ—¶æ ˆ
+int pop(void);//å¼¹å‡ºä¸´æ—¶æ ˆæ ˆé¡¶
+int isEmpty(void);//åˆ¤æ–­ä¸´æ—¶æ ˆæ˜¯å¦ä¸ºç©º
+int isReal(void);//åˆ¤æ–­ä¸´æ—¶æ ˆé¡¶çš„æ•°æ˜¯å¦ä¸ºrealåž‹
+int fout_id_list(int type,FILE* ofile);//è¾“å‡ºIDåˆ—è¡¨
+int test_out(int type);//æµ‹è¯•ç”¨å‡½æ•°ï¼Œæ ¹æ®typeå€¼è¾“å‡ºå„ç§ä¿¡æ¯
+int isFloat(char* number);//åˆ¤æ–­ä¸€ä¸ªæ•°æ˜¯å¦ä¸ºæµ®ç‚¹æ•°
 
 /*===============================================*/
 
-/*·ûºÅ±íÕ»Ïà¹Øº¯Êý===============================*/
-int l_push(List* list);//Èë·ûºÅ±íÕ»
-int l_pop(void);//³ö·ûºÅ±íÕ»
+/*ç¬¦å·è¡¨æ ˆç›¸å…³å‡½æ•°===============================*/
+int l_push(List* list);//å…¥ç¬¦å·è¡¨æ ˆ
+int l_pop(void);//å‡ºç¬¦å·è¡¨æ ˆ
 /*===============================================*/
 
-/*·ûºÅ±íÏà¹Øº¯Êý=================================*/
-int insert(char* id);//²åÈë·ûºÅ±í²Ù×÷¡£Èô¸Ã±êÊ¶·ûÒÑ´æÔÚ£¬Ôò·µ»Ø-1£¬ÌáÊ¾´æÔÚÖØ¶¨Òå´íÎó£»·ñÔò½«¸Ã±êÊ¶·û²åÈë·ûºÅ±í
-int search(char* id);//ËÑË÷·ûºÅ±í²Ù×÷£¬Èô¸Ã±êÊ¶·ûÔÚµ±Ç°·ûºÅ±íÖÐ´æÔÚ£¬Ôò·µ»ØÆä±àºÅ£»Èô¸Ã±êÊ¶·ûÔÚµ±Ç°·ûºÅ±íÖÐ²»´æÔÚ£¬ÔòËÑË÷ÆäÉÏ¼¶·ûºÅ±í£¬²¢·µ»ØÆä±àºÅ£»ÈôËùÓÐ·ûºÅ±íÖÐ¾ù²»´æÔÚ£¬Ôò·µ»Ø-1£¬²¢ÌáÊ¾´íÎó
+/*ç¬¦å·è¡¨ç›¸å…³å‡½æ•°=================================*/
+int insert(char* id);//æ’å…¥ç¬¦å·è¡¨æ“ä½œã€‚è‹¥è¯¥æ ‡è¯†ç¬¦å·²å­˜åœ¨ï¼Œåˆ™è¿”å›ž-1ï¼Œæç¤ºå­˜åœ¨é‡å®šä¹‰é”™è¯¯ï¼›å¦åˆ™å°†è¯¥æ ‡è¯†ç¬¦æ’å…¥ç¬¦å·è¡¨
+int search(char* id);//æœç´¢ç¬¦å·è¡¨æ“ä½œï¼Œè‹¥è¯¥æ ‡è¯†ç¬¦åœ¨å½“å‰ç¬¦å·è¡¨ä¸­å­˜åœ¨ï¼Œåˆ™è¿”å›žå…¶ç¼–å·ï¼›è‹¥è¯¥æ ‡è¯†ç¬¦åœ¨å½“å‰ç¬¦å·è¡¨ä¸­ä¸å­˜åœ¨ï¼Œåˆ™æœç´¢å…¶ä¸Šçº§ç¬¦å·è¡¨ï¼Œå¹¶è¿”å›žå…¶ç¼–å·ï¼›è‹¥æ‰€æœ‰ç¬¦å·è¡¨ä¸­å‡ä¸å­˜åœ¨ï¼Œåˆ™è¿”å›ž-1ï¼Œå¹¶æç¤ºé”™è¯¯
 /*===============================================*/
 
-int initialList(List* list);//·ûºÅ±í³õÊ¼»¯º¯Êý
-int exp_check(char* des,char* src,int start,int end);//×Ö·û´®±È½Ïº¯Êý£¬ÓÃÓÚ¼ì²éÀàÐÍ±í´ïÊ½
-int para_number(char* type_expression);//Í³¼Æº¯Êý¼°¹ý³ÌÀàÐÍ±í´ïÊ½ÖÐµÄ²ÎÊý¸öÊý
-int get_range_number(char* type_expression);//»ñÈ¡Êý×éÀàÐÍ±í´ïÊ½ÖÐµÄ½Ç±ê·¶Î§£¬·Ö±ð±£´æÔÚnum1¡¢num2ÖÐ£¬Í¬Ê±½«Êý×éÀàÐÍ±£´æÔÚtype_exp_aÖÐ4
+int initialList(List* list);//ç¬¦å·è¡¨åˆå§‹åŒ–å‡½æ•°
+int exp_check(char* des,char* src,int start,int end);//å­—ç¬¦ä¸²æ¯”è¾ƒå‡½æ•°ï¼Œç”¨äºŽæ£€æŸ¥ç±»åž‹è¡¨è¾¾å¼
+int para_number(char* type_expression);//ç»Ÿè®¡å‡½æ•°åŠè¿‡ç¨‹ç±»åž‹è¡¨è¾¾å¼ä¸­çš„å‚æ•°ä¸ªæ•°
+int get_range_number(char* type_expression);//èŽ·å–æ•°ç»„ç±»åž‹è¡¨è¾¾å¼ä¸­çš„è§’æ ‡èŒƒå›´ï¼Œåˆ†åˆ«ä¿å­˜åœ¨num1ã€num2ä¸­ï¼ŒåŒæ—¶å°†æ•°ç»„ç±»åž‹ä¿å­˜åœ¨type_exp_aä¸­4
 
 void yyerror(void);
 //=======================================================================================================
@@ -317,7 +317,7 @@ type : standard_type
            fprintf(hout,"{\n");
            cur_top = top;
            
-           //Îª¼ÇÂ¼´´½¨·ûºÅ±í
+           //ä¸ºè®°å½•åˆ›å»ºç¬¦å·è¡¨
            
            l_stack[l_top - 1]->table[atoi(stack[top-1])].list = malloc (sizeof(List));
            initialList(l_stack[l_top - 1]->table[atoi(stack[top-1])].list);
@@ -387,7 +387,7 @@ subproc_head : FUNCTION ID
                    fprintf(hout,"(");                                     
                    fflush(hout);
                    
-                   //Îªº¯Êý´´½¨·ûºÅ±í
+                   //ä¸ºå‡½æ•°åˆ›å»ºç¬¦å·è¡¨
                    l_stack[l_top - 1]->table[(int)$2].list = malloc (sizeof(List));
                    initialList(l_stack[l_top - 1]->table[(int)$2].list);
                    l_push(l_stack[l_top - 1]->table[(int)$2].list);
@@ -407,7 +407,7 @@ subproc_head : FUNCTION ID
                    fflush(hout);                                 
                    fseek(hout,- fptr_offset - (ftell(hout) - cur_fptr_position),1);
                    
-                   //Îªº¯ÊýÀàÐÍ±í´ïÊ½¸³Öµ
+                   //ä¸ºå‡½æ•°ç±»åž‹è¡¨è¾¾å¼èµ‹å€¼
                    strcat(type_exp_fp,"-");
                    strcat(type_exp_fp,top_str);
                    strcpy(l_stack[l_top - 2]->table[(int)$2].type,type_exp_fp);
@@ -422,7 +422,7 @@ subproc_head : FUNCTION ID
                    fprintf(hout,"(");                                     
                    fflush(hout);
                    
-                   //Îª¹ý³Ì´´½¨·ûºÅ±í
+                   //ä¸ºè¿‡ç¨‹åˆ›å»ºç¬¦å·è¡¨
                    l_stack[l_top - 1]->table[(int)$2].list = malloc (sizeof(List));
                    initialList(l_stack[l_top - 1]->table[(int)$2].list);
                    l_push(l_stack[l_top - 1]->table[(int)$2].list);
@@ -440,7 +440,7 @@ subproc_head : FUNCTION ID
                    fflush(hout);                                 
                    fseek(hout,- fptr_offset - (ftell(hout) - cur_fptr_position),1);
                    
-                   //Îª¹ý³ÌÀàÐÍ±í´ïÊ½¸³Öµ
+                   //ä¸ºè¿‡ç¨‹ç±»åž‹è¡¨è¾¾å¼èµ‹å€¼
                    strcat(type_exp_fp,"-");
                    strcat(type_exp_fp,"void");
                    strcpy(l_stack[l_top - 2]->table[(int)$2].type,type_exp_fp);                  
@@ -597,7 +597,7 @@ variable : ID
                      {
                          printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
                          $1 = insert(id_str);
-                         strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
+                         strcpy(l_stack[0]->table[(int)$1].type,"int");//æœªå®šä¹‰å°±ä½¿ç”¨çš„å˜é‡ï¼Œå‡è®¤ä¸ºæ˜¯æ•´åž‹
                      }
                      upper_level = 1;
                      l_push(l_top_str);
@@ -606,7 +606,7 @@ variable : ID
                   {
                      printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
                      $1 = insert(id_str);
-                     strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
+                     strcpy(l_stack[0]->table[(int)$1].type,"int");//æœªå®šä¹‰å°±ä½¿ç”¨çš„å˜é‡ï¼Œå‡è®¤ä¸ºæ˜¯æ•´åž‹
                      upper_level = 0;
                   }
                }
@@ -629,7 +629,7 @@ variable : ID
                {
                    printf("\nLine %d: Warning: Procedure has no return value.\n",yylineno);
                    is_function = 1;
-                   push("int");//½«´íÎóµ÷ÓÃµÄ¹ý³Ì´¦ÀíÎªintÀàÐÍµÄ±äÁ¿£¬ÒÔ¼ÌÐø·ÖÎö
+                   push("int");//å°†é”™è¯¯è°ƒç”¨çš„è¿‡ç¨‹å¤„ç†ä¸ºintç±»åž‹çš„å˜é‡ï¼Œä»¥ç»§ç»­åˆ†æž
                }
                else
                {
@@ -637,1339 +637,9 @@ variable : ID
                    if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "array",0,4))
                    {
                        printf("\nLine %d: Warning: Incorrect reference of the array:lack of corner mark.\n",yylineno);
-                       push("int");//½«´íÎóÒýÓÃµÄÊý×éÃû´¦ÀíÎªintÀàÐÍµÄ±äÁ¿£¬ÒÔ¼ÌÐø·ÖÎö
+                       push("int");//å°†é”™è¯¯å¼•ç”¨çš„æ•°ç»„åå¤„ç†ä¸ºintç±»åž‹çš„å˜é‡ï¼Œä»¥ç»§ç»­åˆ†æž
                    }
                    else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "record",0,5))
                    {
                        printf("\nLine %d: Warning: Incorrect reference of the record.\n",yylineno);
-                       push("int");//½«´íÎóÒýÓÃµÄ¼ÇÂ¼Ãû´¦ÀíÎªintÀàÐÍµÄ±äÁ¿£¬ÒÔ¼ÌÐø·ÖÎö
-                   }
-                   else
-                   {
-                       push(l_stack[l_top-1-upper_level]->table[(int)$1].type);
-                   }
-                   if (write_in_c == 0) 
-                       fprintf(hout,id_str);
-				   else
-                       fprintf(fout,id_str);
-               }                   
-           }
-         | ID 
-           {
-               $1 = search(id_str);
-               if ($1 == -1)
-               {
-                  if (l_top != 1)
-                  {
-                     l_pop();
-                     $1 = search(id_str);
-                     if ($1 == -1)
-                     {
-                         printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                         $1 = insert(id_str);
-                         strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                     }
-                     upper_level = 1;
-                     l_push(l_top_str);
-                  }
-                  else                             
-                  {
-                     printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                     $1 = insert(id_str);
-                     strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                     upper_level = 0;
-                  }
-               }
-               else
-				  upper_level = 0;   
-					    
-			    if (! exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "array",0,4)) 
-					 printf("\nLine %d: Warning: %s is not an array.\n",id_str);
-               is_function = 0;
-               if (write_in_c == 0)
-               {
-                   fprintf(hout,id_str);
-                   fprintf(hout,"[");
-               }
-               else
-               {
-                   fprintf(fout,id_str);
-                   fprintf(fout,"[");
-               }
-               itoa(upper_level,number,10);
-               push(number);
-                   
-           }
-           '[' expression ']'
-           {
-               pop();
-               upper_level = atoi(top_str);
-               if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "array",0,4) && is_const == 1)
-               {
-                   get_range_number(l_stack[l_top-1-upper_level]->table[(int)$1].type);
-                   if (atoi(number) < num1 || atoi(number) > num2)
-                   {
-                        printf("\nLine %d: Warning: Incorrect reference of the array:%s is out of range.\n",yylineno,number);
-                   }
-               }
-               if (write_in_c == 0)
-               {
-                   fprintf(hout,"]");
-               }
-               else
-               {
-                   fprintf(fout,"]");
-               }
-               get_range_number(l_stack[l_top-1-upper_level]->table[(int)$1].type);
-               push(type_exp_a);
-           }
-         ;
-procedure_statement : ID
-                      {
-                        $1 = search(id_str);
-                        if ($1 == -1)
-                        {
-                             if (l_top != 1)
-                             {
-                                 l_pop();
-                                 $1 = search(id_str);
-                                 if ($1 == -1)
-                                 {
-                                     printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                                     $1 = insert(id_str);
-                                     strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                                 }
-                                 upper_level = 1;
-                                 l_push(l_top_str);
-                             }
-                             else                             
-                             {
-                                 printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                                 $1 = insert(id_str);
-                                 strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                                 upper_level = 0;
-                             }
-                        }
-                        else
-							 upper_level = 0; 
-                 
-						  for (i = 0;i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type) && l_stack[l_top-1-upper_level]->table[(int)$1].type[i] != '-'; i++);
-						  if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "int",i+1,i+3) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))                 
-                          {
-
-                          }
-                          else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "float",i+1,i+5) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-                          {
-
-                          }    
-                          else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "void",i+1,i+4) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-                          {
-                              
-                          }
-                          else
-						  {
-							  printf("\nLine %d: Warning: %s is not a function or a procedure.\n",yylineno,id_str);                   
-						  }        
-                 
-                          if (write_in_c == 0)
-                              fprintf(hout,id_str);
-                          else
-                              fprintf(fout,id_str);
-                      }
-                    | ID 
-                      {
-                          $1 = search(id_str);
-                          if ($1 == -1)
-                          {
-                             if (l_top != 1)
-                             {
-                                 l_pop();
-                                 $1 = search(id_str);
-                                 if ($1 == -1)
-                                 {
-                                     printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                                     $1 = insert(id_str);
-                                     strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                                 }
-                                 upper_level = 1;
-                                 l_push(l_top_str);
-                             }
-                             else                             
-                             {
-                                 printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                                 $1 = insert(id_str);
-                                 strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                                 upper_level = 0;
-                             }
-                          }
-                          else
-							 upper_level = 0; 
-                          
-                          
-						  for (i = 0;i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type) && l_stack[l_top-1-upper_level]->table[(int)$1].type[i] != '-'; i++);
-						  if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "int",i+1,i+3) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))                 
-                          {
-
-                          }
-                          else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "float",i+1,i+5) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-                          {
-                          
-                          }    
-                          else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "void",i+1,i+4) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-                          {
-                             
-                          }
-                          else
-						  {
-							  printf("\nLine %d: Warning: %s is not a function or a procedure.\n",yylineno,id_str);                   
-						  }
-						  
-						  para0 = para_number(l_stack[l_top-1-upper_level]->table[(int)$1].type);
-						  
-                          if (write_in_c == 0)
-                          {
-                              fprintf(hout,id_str);
-                              fprintf(hout,"(");
-                          }
-                          else
-                          {
-                              fprintf(fout,id_str);
-                              fprintf(fout,"(");
-                          }
-                      }
-                      '(' expression_list ')'
-                      {
-                          if (para != para0)
-                              printf("\nLine %d: Warning: The number of parameters is incorrect.\n",yylineno);
-                          else
-                          {
-                              for (i = para0; i >= 1; i --)
-                              {
-                                  pop();
-                                  if (strcmp(l_stack[0]->table[(int)$1].list->table[i-1].type, top_str) != 0)
-                                  {
-                                      printf("\nLine %d: Warning: Parameter %d is of incorrect type.\n",yylineno,i);
-                                  }
-                              }
-                          }
-                          if (write_in_c == 0)
-                          {
-                              fprintf(hout,")");
-                          }
-                          else
-                          {
-                              fprintf(fout,")");
-                          }
-                          
-                      }
-                    ;
-expression_list : expression_list ',' 
-                  {
-                      if (write_in_c == 0)
-                          fprintf(hout,", ");
-                      else
-                          fprintf(fout,", ");
-                  }
-                  expression
-                  {
-                      para ++;
-                      push(type_expression);
-                  }
-                | expression
-                  {
-                      para = 1;
-                      push(type_expression);
-                  }
-                ;
-expression_list2 : expression_list2 ',' 
-                  {
-                      if (write_in_c == 0)
-                          fprintf(hout,", ");
-                      else
-                          fprintf(fout,", ");
-                  }
-                  K expression
-                  {
-                      if (write_in_c == 0)
-                      {
-                          if (strcmp(type_expression,"int")==0)
-                          {                              
-                              fptr_offset = cur_fptr_position - ftell(hout);
-                              fseek(hout,fptr_offset,1);
-                              fprintf(hout,"d");                
-                              fflush(hout);                                 
-                              fseek(hout,- fptr_offset - (ftell(hout) - cur_fptr_position),1);
-                          }
-                          fprintf(hout,");\n");
-                      }
-                      else
-                      {
-                          if (strcmp(type_expression,"int")==0)
-                          {                              
-                              fptr_offset = cur_fptr_position - ftell(hout);
-                              fseek(fout,fptr_offset,1);
-                              fprintf(fout,"d");                
-                              fflush(fout);                                 
-                              fseek(fout,- fptr_offset - (ftell(hout) - cur_fptr_position),1);
-                          }
-                          fprintf(fout,");\n");
-                      }
-                  }
-                | K expression
-                  {
-                      if (write_in_c == 0)
-                      {
-                          if (strcmp(type_expression,"int")==0)
-                          {                              
-                              fptr_offset = cur_fptr_position - ftell(hout);
-                              fseek(hout,fptr_offset,1);
-                              fprintf(hout,"d");                
-                              fflush(hout);                                 
-                              fseek(hout,- fptr_offset - (ftell(hout) - cur_fptr_position),1);
-                          }
-                          fprintf(hout,");\n");
-                      }
-                      else
-                      {
-                          if (strcmp(type_expression,"int")==0)
-                          {                              
-                              fptr_offset = cur_fptr_position - ftell(fout);
-                              fseek(fout,fptr_offset,1);
-                              fprintf(fout,"d");                
-                              fflush(fout);                                 
-                              fseek(fout,- fptr_offset - (ftell(fout) - cur_fptr_position),1);
-                          }
-                          fprintf(fout,");\n");
-                      }
-                  }
-                ;
-K:
- {
-     if (write_in_c == 0)
-     {
-         fprintf(hout,"printf(\"");
-         fprintf(hout,"%%");
-         cur_fptr_position = ftell(hout); 
-         fprintf(hout,"f \",");
-     }
-     else
-     {
-         fprintf(fout,"printf(\"");
-         fprintf(fout,"%%");
-         cur_fptr_position = ftell(fout); 
-         fprintf(fout,"f \",");
-     }
- }
- ;
-expression : simple_expression RELOP 
-             {                               
-                 switch(no)
-                 {
-                     case LT:
-                         if (write_in_c == 0)
-                             fprintf(hout," < ");
-                         else
-                             fprintf(fout," < ");
-                         break;    
-                     case LE:
-                         if (write_in_c == 0)
-                             fprintf(hout," <= ");
-                         else
-                             fprintf(fout," <= ");
-                         break;
-                     case EQ:
-                         if (write_in_c == 0)
-                             fprintf(hout," == ");
-                         else
-                             fprintf(fout," == ");
-                         break; 
-                     case GE:
-                         if (write_in_c == 0)
-                             fprintf(hout," >= ");
-                         else
-                             fprintf(fout," >= ");
-                         break; 
-                     case GT:
-                         if (write_in_c == 0)
-                             fprintf(hout," > ");
-                         else
-                             fprintf(fout," > ");
-                         break;  
-                     case NE:
-                         if (write_in_c == 0)
-                             fprintf(hout," != ");
-                         else
-                             fprintf(fout," != ");
-                         break;  
-                 }                 
-             }
-             simple_expression
-             {
-                 strcpy(type_expression,"int");
-                 is_const = 0;
-             }
-           | simple_expression
-             {
-                is_const = $1;
-             }
-           ;
-simple_expression :term
-                   {
-                       $$ = $1;
-                   }
-                  |sign term
-                   {
-                       $$ = $2;
-                       if ($2 == 1)
-                       {
-                           if ($1 == -1)
-                           {
-                               strcpy(top_str,"-");
-                               strcat(top_str,number);
-                               strcpy(number,top_str);
-                           }
-                           
-                       }
-                   }
-                  |simple_expression ADDOP 
-                   {
-                        push(type_expression);
-                        switch(no)
-                        {
-                             case ADD:
-                                 if (write_in_c == 0)
-                                     fprintf(hout," + ");
-                                 else
-                                     fprintf(fout," + ");
-                                 is_logic = 0;
-                                 break;
-                             case SUB:
-                                 if (write_in_c == 0)
-                                     fprintf(hout," - ");
-                                 else
-                                     fprintf(fout," - ");
-                                 is_logic = 0;
-                                 break;
-                             case OR:
-                                 if (write_in_c == 0)
-                                     fprintf(hout," || ");
-                                 else
-                                     fprintf(fout," || ");
-                                 is_logic = 1;
-                                 break;
-                        }
-                   }
-                   term
-                   {
-                       pop();
-                       if (is_logic)//ÈôÎªÂß¼­ÔËËã£¬Ôò¹æÔ¼³öµÄsimple_expressionÀàÐÍÖ±½ÓÎªint
-                           strcpy(type_expression,"int");
-                       else//ÈôÎªËãÊõÔËËã
-                       {
-                           if (strcmp(type_expression,"int")!=0 || strcmp(top_str,"int")!=0)//Èô²ÎÓëÔËËãµÄÁ½¸öÊý¾ùÎªintÀàÐÍ£¬Ôò¹æÔ¼³öµÄsimple_expressionÒ²ÎªintÐÍ£¬·ñÔòÎªfloatÐÍ
-						   {
-							    strcpy(type_expression,"float");
-						   }
-                       }
-                       $$ = 0;
-                   }
-                  |ID 
-                    {
-                        $1 = search(id_str);
-                        if ($1 == -1)
-                        {
-                             if (l_top != 1)
-                             {
-                                 l_pop();
-                                 $1 = search(id_str);
-                                 if ($1 == -1)
-                                 {
-                                     printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                                     $1 = insert(id_str);
-                                     strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                                 }
-                                 upper_level = 1;
-                                 l_push(l_top_str);
-                             }
-                             else                             
-                             {
-                                 printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                                 $1 = insert(id_str);
-                                 strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                                 upper_level = 0;
-                             }
-                        }
-                        else
-							 upper_level = 0;   						 
-						for (i = 0;i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type) && l_stack[l_top-1-upper_level]->table[(int)$1].type[i] != '-'; i++);
-						if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "int",i+1,i+3) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))                 
-						{
-							printf("\nLine %d: Warning: %s is a function.\n",yylineno,id_str);
-							strcpy(type_expression,"int");
-						}
-						else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "float",i+1,i+5) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-						{
-							printf("\nLine %d: Warning: %s is a function.\n",yylineno,id_str);
-							strcpy(type_expression,"float");
-						}    
-						else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "void",i+1,i+4) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-						{
-							printf("\nLine %d: Warning: %s is a procedure.\n",yylineno,id_str);
-							strcpy(type_expression,"int");
-						}
-						else
-						{
-							if (! exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "array",0,4)) 
-							{
-								printf("\nLine %d: Warning: %s is not an array.\n",id_str);
-								strcpy(type_expression,"int");//½«´íÎóÒýÓÃµÄÊý×éÃû×ª»¯ÎªintÀàÐÍ£¬ÒÔ¼ÌÐø·ÖÎö
-							}
-						}	 
-										    
-                        if (write_in_c == 0)
-						{
-						    fprintf(hout,id_str);
-							fprintf(hout,"[");
-						}
-						else
-						{
-							fprintf(fout,id_str);
-							fprintf(fout,"[");
-						}
-					}
-					'[' expression ']'
-					{
-					   
-					    if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "array",0,4) && is_const == 1)
-                        {
-                            get_range_number(l_stack[l_top-1-upper_level]->table[(int)$1].type);
-							if (atoi(number) < num1 || atoi(number) > num2)
-							{
-									printf("\nLine %d: Warning: Incorrect reference of the array:%s is out of range.\n",yylineno,number);
-							}
-						}
-						if (write_in_c == 0)
-						{
-							fprintf(hout,"]");
-						}
-						else
-						{
-							fprintf(fout,"]");
-						}
-						if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "array",0,4))
-						    strcpy(type_expression,type_exp_a);
-					}
-                  ;
-term : term MULOP 
-       {
-           push(type_expression);
-           switch(no)
-           {
-               case MUL:
-                   if (write_in_c == 0)
-                       fprintf(hout," * ");
-                   else
-                       fprintf(fout," * ");
-                   is_logic = 0;
-                   break;
-               case DIV:case DVD:
-                   if (write_in_c == 0)
-                       fprintf(hout," / ");
-                   else
-                       fprintf(fout," / ");
-                   is_logic = 0;
-                   break;
-               case MOD:
-                   if (write_in_c == 0)
-                       fprintf(hout," %% ");
-                   else
-                       fprintf(fout," %% ");
-                   is_logic = 0;
-                   break;
-               case AND:
-                   if (write_in_c == 0)
-                       fprintf(hout," && ");
-                   else
-                       fprintf(fout," && ");
-                   is_logic = 1;
-                   break;
-           }
-       }
-       factor
-       {
-           pop();
-           if (is_logic)//ÈôÎªÂß¼­ÔËËã£¬ÔòtermÀàÐÍÖ±½ÓÎªint
-               strcpy(type_expression,"int");
-           else//ÈôÎªËãÊõÔËËã
-           {
-               if (exp_check(type_expression,"array",0,4) || exp_check(top_str,"array",0,4))//Èô²ÎÓëÔËËãµÄÊýÖÐÓÐ´íÎóÒýÓÃµÄÊý×éÃû
-               {
-                   printf("\nLine %d: Warning: Incorrect reference of the array:lack of corner mark.\n",yylineno);
-               } 
-               else if (exp_check(type_expression,"record",0,5) || exp_check(top_str,"record",0,5))//Èô²ÎÓëÔËËãµÄÊýÖÐÓÐ´íÎóÒýÓÃµÄ¼ÇÂ¼Ãû
-               {
-                   printf("\nLine %d: Warning: Wrong reference of the record.\n",yylineno);
-               }
-                             
-               if (strcmp(type_expression,"int")!=0 || strcmp(top_str,"int")!=0)//Èô²ÎÓëÔËËãµÄÁ½¸öÊý¾ùÎªintÀàÐÍ£¬Ôò¹æÔ¼³öµÄtermÒ²ÎªintÐÍ£¬·ñÔòÎªfloatÐÍ
-               {
-                   strcpy(type_expression,"float");
-               }
-               
-           }
-           $$ = 0;
-       }
-     | factor
-       {
-           $$ = $1;         
-       }
-     ;
-factor : ID
-         {                         
-             $1 = search(id_str);
-             if ($1 == -1)
-             {
-                  if (l_top != 1)
-                  {
-                      l_pop();
-                      $1 = search(id_str);
-                      if ($1 == -1)
-                      {
-                          printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                          $1 = insert(id_str);
-                          strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                      }
-                      upper_level = 1;
-                      l_push(l_top_str);
-                  }
-                  else                             
-                  {
-                      printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                      $1 = insert(id_str);
-                      strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                      upper_level = 0;
-                  }
-             }
-             else
-		         upper_level = 0;     
-             for (i = 0;i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type) && l_stack[l_top-1-upper_level]->table[(int)$1].type[i] != '-'; i++);
-             if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "int",i+1,i+3) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))                 
-             {
-                 printf("\nLine %d: Warning: %s is a function.Lack of parameters.\n",yylineno,id_str);
-                 strcpy(type_expression,"int");
-             }
-             else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "float",i+1,i+5) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-             {
-                 printf("\nLine %d: Warning: %s is a function.Lack of parameters.\n",yylineno,id_str);
-                 strcpy(type_expression,"float");
-             }    
-             else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "void",i+1,i+4) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-             {
-                   printf("\nLine %d: Warning: Procedure has no return value.\n",yylineno);
-                   strcpy(type_expression,"int");//½«´íÎóµ÷ÓÃµÄ¹ý³Ì´¦ÀíÎª·µ»ØÖµÎªintÀàÐÍµÄº¯Êý£¬ÒÔ¼ÌÐø·ÖÎö
-             }
-             else
-             {
-                   if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "array",0,4))
-                   {
-                       printf("\nLine %d: Warning: Wrong reference of the array:lack of corner mark.\n",yylineno);
-                       strcpy(type_expression,"int");//½«´íÎóÒýÓÃµÄÊý×éÃû´¦ÀíÎªÎªintÀàÐÍ£¬ÒÔ¼ÌÐø·ÖÎö
-                   }
-                   else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "record",0,5))
-                   {
-                       printf("\nLine %d: Warning: Wrong reference of the record.\n",yylineno);
-                       strcpy(type_expression,"int");//½«´íÎóÒýÓÃµÄ½á¹¹Ãû´¦ÀíÎªÎªintÀàÐÍ£¬ÒÔ¼ÌÐø·ÖÎö
-                   }
-                   else
-                       strcpy(type_expression,l_stack[l_top-1-upper_level]->table[(int)$1].type);
-                   
-             }           
-                                              
-             if (write_in_c == 0)
-                 fprintf(hout,id_str);
-             else
-                 fprintf(fout,id_str);
-             $$ = 0;//±íÃ÷¸Ãfactor²»ÊÇÊý
-             
-         }
-       | ID 
-         {
-             $1 = search(id_str);
-             if ($1 == -1)
-             {
-                 if (l_top != 1)
-                 {
-                    l_pop();
-                    $1 = search(id_str);
-                    if ($1 == -1)
-                    {
-                       printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                       $1 = insert(id_str);
-                       strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                    }
-                    upper_level = 1;
-                    l_push(l_top_str);
-                 }
-                 else                             
-                 {
-                    printf("\nLine %d: Warning: %s is undefined.\n",yylineno,id_str);
-                    $1 = insert(id_str);
-                    strcpy(l_stack[0]->table[(int)$1].type,"int");//Î´¶¨Òå¾ÍÊ¹ÓÃµÄ±äÁ¿£¬¾ùÈÏÎªÊÇÕûÐÍ
-                    upper_level = 0;
-                 }
-             }
-             else
-				 upper_level = 0;            
-             for (i = 0;i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type) && l_stack[l_top-1-upper_level]->table[(int)$1].type[i] != '-'; i++);
-             if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "int",i+1,i+3) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))                 
-             {
-                 strcpy(type_expression,"int");
-             }
-             else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "float",i+1,i+5) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-             {
-                 strcpy(type_expression,"float");
-             }    
-             else if (exp_check(l_stack[l_top-1-upper_level]->table[(int)$1].type, "void",i+1,i+4) && i <= strlen(l_stack[l_top-1-upper_level]->table[(int)$1].type))
-             {
-                   printf("\nLine %d: Warning: Procedure has no return value.\n",yylineno);
-                   strcpy(type_expression,"int");//½«´íÎóµ÷ÓÃµÄ¹ý³Ì´¦ÀíÎª·µ»ØÖµÎªintÀàÐÍµÄº¯Êý£¬ÒÔ¼ÌÐø·ÖÎö
-             }
-             else
-             {
-                   printf("\nLine %d: Warning: %s is not a function.\n",yylineno,id_str);    
-                   strcpy(type_expression,"int");//½«´íÎóµ÷ÓÃµÄº¯Êý´¦ÀíÎªintÀàÐÍµÄ±äÁ¿£¬ÒÔ¼ÌÐø·ÖÎö               
-             }        
-             
-             para0 = para_number(l_stack[l_top-1-upper_level]->table[(int)$1].type);    
-                 
-             if (write_in_c == 0)
-             {
-                 fprintf(hout,id_str);
-                 fprintf(hout,"(");
-             }
-             else
-             {
-                 fprintf(fout,id_str);
-                 fprintf(fout,"(");
-             }
-                 
-         }
-         '(' expression_list ')'
-         {
-             if (write_in_c == 0)
-             {
-                 fprintf(hout,")");
-                 for (i = 0;i<=strlen(l_stack[l_top-2]->table[(int)$1].type) && l_stack[l_top-2]->table[(int)$1].type[i] != '-'; i++);
-				 if (exp_check(l_stack[l_top-2]->table[(int)$1].type, "int",i+1,i+3) && i<=strlen(l_stack[l_top-2]->table[(int)$1].type))                 
-					strcpy(type_expression,"int");
-				 else if (exp_check(l_stack[l_top-2]->table[(int)$1].type, "float",i+1,i+5) && i<=strlen(l_stack[l_top-2]->table[(int)$1].type))
-					strcpy(type_expression,"float");
-			     else if (exp_check(l_stack[l_top-2]->table[(int)$1].type, "void",i+1,i+4) && i<=strlen(l_stack[l_top-2]->table[(int)$1].type))
-					strcpy(type_expression,"void");
-				 else
-				 {
-					printf("\nLine:%d: %s is not a function or a procedure.\n",yylineno,l_stack[l_top-2]->table[(int)$1].name);
-					strcpy(type_expression,l_stack[l_top-2]->table[(int)$1].type);
-				 }
-             }
-             else
-             {
-                 fprintf(fout,")");
-                 for (i = 0;i<=strlen(l_stack[l_top-1]->table[(int)$1].type) && l_stack[l_top-1]->table[(int)$1].type[i] != '-'; i++);
-				 if (exp_check(l_stack[l_top-1]->table[(int)$1].type, "int",i+1,i+3) && i<=strlen(l_stack[l_top-1]->table[(int)$1].type))                 
-					strcpy(type_expression,"int");
-				 else if (exp_check(l_stack[l_top-1]->table[(int)$1].type, "float",i+1,i+5) && i<=strlen(l_stack[l_top-1]->table[(int)$1].type))
-					strcpy(type_expression,"float");
-			     else if (exp_check(l_stack[l_top-1]->table[(int)$1].type, "void",i+1,i+4) && i<=strlen(l_stack[l_top-1]->table[(int)$1].type))
-					strcpy(type_expression,"void");
-				 else
-				 {
-					printf("\nLine:%d: %s is not a function or a procedure.\n",yylineno,l_stack[l_top-1]->table[(int)$1].name);
-				    strcpy(type_expression,l_stack[l_top-2]->table[(int)$1].type);	
-				 }
-             }
-             if (para != para0)
-                 printf("\nLine %d: Warning: The number of parameters is incorrect.\n",yylineno);
-             else
-             {
-                 for (i = para0; i >= 1; i --)
-                 {
-                     pop();
-                     if (strcmp(l_stack[0]->table[(int)$1].list->table[i-1].type, top_str) != 0)
-                     {
-                         printf("\nLine %d: Warning: Parameter %d is of incorrect type.\n",yylineno,i);
-                     }
-                 }
-             }    
-             $$ = 0;//±íÃ÷¸Ãfactor²»ÊÇ³£Êý
-         }
-         
-       | NUM
-         {
-             pop();
-             strcpy(type_expression,"int");
-             if (write_in_c == 0)
-                 fprintf(hout,top_str);
-             else
-                 fprintf(fout,top_str);
-             for (i = 0; i <= strlen(top_str)-1 ; i++)
-                 if (top_str[i] == '.')
-                 {
-                     strcpy(type_expression,"float");
-                     break;
-                 }             
-             $$ = 1;//±íÃ÷¸ÃfactorÊÇ³£Êý
-             strcpy(number,top_str);
-         }
-       | '(' 
-          {
-             if (write_in_c == 0)
-             {
-                 fprintf(hout,"(");
-             }
-             else
-             {
-                 fprintf(fout,"(");
-             }         
-          }       
-          expression ')'
-          {
-             if (write_in_c == 0)
-             {
-                 fprintf(hout,")");
-             }
-             else
-             {
-                 fprintf(fout,")");
-             }
-             $$ = $2;         
-          }         
-       | NOT 
-         {
-             if (write_in_c == 0)
-             {
-                 fprintf(hout,"!");
-                 fprintf(hout,"(");
-             }
-             else
-             {
-                 fprintf(fout,"!");
-                 fprintf(fout,"(");
-             }
-         }
-         factor
-         {
-         
-             if (write_in_c == 0)
-             {
-                 fprintf(hout,")");
-             }
-             else
-             {
-                 fprintf(fout,")");
-             }
-             $$ = $2;
-         }
-       | TRUE
-         {
-             if (write_in_c == 0)
-                 fprintf(hout," 1 ");
-             else
-                 fprintf(fout," 1 ");
-             $$ = 0;//±íÃ÷¸Ãfactor²»ÊÇ³£Êý
-             strcpy(type_expression,"int");
-         }
-       | FALSE
-         {
-             if (write_in_c == 0)
-                 fprintf(hout," 0 ");
-             else
-                 fprintf(fout," 0 ");
-             $$ = 0;//±íÃ÷¸Ãfactor²»ÊÇ³£Êý
-             strcpy(type_expression,"int");
-         }
-       ;
-sign : ADDOP       
-       {
-           if (no == ADD)
-           {
-             if (write_in_c == 0)
-                 fprintf(hout," + ");
-             else
-                 fprintf(fout," + ");
-             $$ = 1;
-           }
-           else if (no == SUB)
-           {
-             if (write_in_c == 0)
-                 fprintf(hout," - ");
-             else
-                 fprintf(fout," - ");
-             $$ = -1;  
-           }
-       }
-     ;
-program_body : declarations 
-               subproc_declarations 
-               {
-                   //½øÈëÏò.cÎÄ¼þÐ´ÈëµÄ×´Ì¬
-                   write_in_c = 1;
-               }
-               compound_statement
-               {
-                   fprintf(fout,"\nprintf(\"\\n\");\nsystem(\"pause\");\nreturn 0;\n}\n");
-               }
-             ;
-subproc_declaration : subproc_head
-                      declarations
-                      compound_statement
-                      {
-                         
-                         fprintf(hout,"\n}\n");
-                         l_pop();                                                  
-                      }
-                      ;
-
-%%
-int main(int argc, char *argv[])//Ö÷º¯Êý
-{ 
-    int i;
-    char source_file[STRING_MAX],c_file[STRING_MAX];
-    //´ò¿ªPASCALÔ´ÎÄ¼þ
-    if (argc > 1)
-    {
-		if((yyin = fopen(argv[1],"rt"))==NULL)
-		{
-			printf("Can't open file %s\n",argv[1]);
-			system("pause");
-			return 0;
-		} 
-    }
-    else
-    {
-        printf("Please drag the PASCAL source file to this program OR input the path:\n");
-        scanf("%s",source_file);
-        if((yyin = fopen(source_file,"rt"))==NULL)
-		{
-			printf("Can't open file %s\n",source_file);
-			system("pause");
-			return 0;
-		}       
-    }
-    //³õÊ¼»¯ÁÙÊ±Õ»
-    for (i = 0; i <= STACK_SIZE - 1; i++)
-    {
-        memset(stack[i],'\0',sizeof(stack[i]));
-    }
-    top = 0;
-    
-    //³õÊ¼»¯·ûºÅ±íÕ»
-    for (i = 0; i <= STACK_SIZE - 1; i++)
-    {
-        l_stack[i] = NULL;
-    }
-    top = 0;
-    l_top = 0;
-    
-    //³õÊ¼µÄstruct½á¹¹±àºÅÎª0
-    struct_no = 0;
-    
-    //´´½¨Ä¿±êCÎÄ¼þ
-    strcpy(c_file,"target.c");
-    if ((fout = fopen(c_file, "wt")) == NULL)
-    {
-        printf("Can't write in the file %s\n",c_file);
-        system("pause");
-        return 0;
-    }
-        
-    //´´½¨Êä³ö.hÎÄ¼þ£¬ÓÃÓÚ´æ·Åº¯Êý
-    strcpy(c_file,"target.h");
-    if ((hout = fopen(c_file, "wt")) == NULL)
-    {
-        printf("Can't write in the file %s\n",c_file);
-        system("pause");
-        return 0;
-    }
-    
-    //ÎªÄ¿±êCÎÄ¼þÌí¼ÓÔ¤´¦ÀíÐÅÏ¢       
-    fprintf(fout,"#include \"");
-    fprintf(fout,c_file);
-    fprintf(fout,"\"\n");
-    
-    //ÎªÊä³ö.hÎÄ¼þÌí¼ÓÔ¤´¦ÀíÐÅÏ¢       
-    fprintf(hout,"#include <stdlib.h>\n#include <stdio.h>\n#include <string.h>\n\n");
-    
-    //³õÊ¼Ê±ÊÇÏò.cÎÄ¼þÖÐÊä³ö
-    write_in_c = 1;
-    
-        
-    //´´½¨Êä³ö·ûºÅ±íÎÄ¼þ£¬ÓÃÓÚÔÚ·­Òë½áÊøºóÊä³ö·ûºÅ±í
-    strcpy(c_file,"tokenlist.txt");
-    if ((tout = fopen(c_file, "wt")) == NULL)
-    {
-        printf("Can't write in the file %s\n",c_file);
-        system("pause");
-        return 0;
-    }
-    
-    //·­Òë
-	yyparse();
-	
-	//Êä³ö·ûºÅ±íµ½·ûºÅ±íÎÄ¼þ
-	test_out(1);
-   
-	//·­ÒëÍê³É
-	printf("\nTranslation complete.\n\nPlease check out the result in target.c and target.h.\n\nAll the token lists are in tokenlist.txt.\n");
-	
-	fclose(fout);
-	fclose(hout);
-	fclose(tout);
-	system("pause");		 		
-	return 0;
-}
-
-/*ÁÙÊ±Õ»Ïà¹Øº¯Êý=================================*/
-int test_out(int type)//²âÊÔÓÃº¯Êý£¬Êä³öÁÙÊ±Õ»
-{
-    int i,j;
-    printf("\n");
-    if (type == 0)
-    {
-        for (i = 0; i <= STACK_SIZE - 1; i ++)
-            if (strcmp(stack[i],"\0")!=0)
-                printf("%d[ %s ]\n",i,stack[i]);
-    }
-    else if (type == 1)//Êä³ö·ûºÅ±íµ½·ûºÅ±íÎÄ¼þ
-    {
-        fprintf(tout,"name\t\ttype\t\tdefine\n");
-        //Êä³öÖ÷±í
-        for (i = 0; i <= main_list.top - 1; i ++)
-        {
-            fprintf(tout,main_list.table[i].name);
-            fprintf(tout,"\t\t");
-            fprintf(tout,main_list.table[i].type);
-            fprintf(tout,"\t\t");
-            itoa(main_list.table[i].define,number,10);
-            fprintf(tout,number);
-            fprintf(tout,"\n");
-            
-        }
-        //Êä³öËùÓÐ½á¹¹¡¢º¯Êý¼°¹ý³ÌµÄ·ûºÅ±í
-        for (i = 0; i <= main_list.top - 1; i++)
-        {
-            if (exp_check(main_list.table[i].type,"record",0,5) || 
-                exp_check(main_list.table[i].type,"-int",strlen(main_list.table[i].type)-4,strlen(main_list.table[i].type)-1) ||
-                exp_check(main_list.table[i].type,"-float",strlen(main_list.table[i].type)-6,strlen(main_list.table[i].type)-1) ||
-                exp_check(main_list.table[i].type,"-void",strlen(main_list.table[i].type)-5,strlen(main_list.table[i].type)-1)
-               )
-            {
-                fprintf(tout,"\n");
-                fprintf(tout,main_list.table[i].name);
-                fprintf(tout,":\n");
-                fprintf(tout,"name\t\ttype\t\tdefine\n");
-                for (j = 0; main_list.table[i].list!=NULL && j <= main_list.table[i].list->top - 1; j ++)                
-                {
-                    fprintf(tout,main_list.table[i].list->table[j].name);
-					fprintf(tout,"\t\t");
-					fprintf(tout,main_list.table[i].list->table[j].type);
-					fprintf(tout,"\t\t");
-					itoa(main_list.table[i].list->table[j].define,number,10);
-					fprintf(tout,number);
-					fprintf(tout,"\n");
-                }
-            }
-        }
-    }
-    else if (type == 2)
-    {
-        for (i = 0; i <= l_stack[l_top - 1]->top - 1; i ++)
-        {
-            printf("%d[ %s %s]",i,l_stack[l_top - 1]->table[i].name,l_stack[l_top - 1]->table[i].type);
-            for (j = 0; j <= l_stack[l_top - 1]->table[i].atop - 1; j++)
-                printf(" %d",l_stack[l_top - 1]->table[i].appear[j]);
-            printf ("\n");
-        }
-    }    
-    return 0;
-}
-
-int isEmpty(void)//ÅÐ¶ÏÁÙÊ±Õ»ÊÇ·ñÎª¿Õ
-{
-    if (top == 0)
-        return 1;
-    else
-        return 0;
-}
-
-int push(char* temp)//ÈëÁÙÊ±Õ»
-{
-    if (top < STACK_SIZE)
-    {
-        strcpy(stack[top++],temp);
-        return 1;
-    }
-    else
-        printf("The Stack is FULL!\n");
-    return 0;
-}
-
-int pop(void)//µ¯³öÁÙÊ±Õ»Õ»¶¥
-{
-    if (top > 0)
-    {
-        strcpy(top_str,stack[--top]);
-        memset(stack[top],'\0',sizeof(stack[top]));
-        return 1;
-    }
-    else
-        printf("The Stack is EMPTY!The previous top_str is %s\n",top_str);
-    return 0;
-}
-
-int isReal(void)//ÅÐ¶ÏÁÙÊ±Õ»¶¥µÄÊýÊÇ·ñÎªrealÐÍ
-{
-    int i,l;
-    l = strlen(top_str);
-    for (i = 0; i <= l - 1; i++)
-        if (top_str[i] == '.')
-             return 1;
-    return 0;
-}
-int isFloat(char* number)//ÅÐ¶ÏNumberÊÇ·ñÊÇ¸¡µãÊý
-{
-    int i;
-    for (i = 0; i <= strlen(number) - 1; i ++)
-        if (number[i] == '.')
-            return 1;
-    return 0;
-}
-int fout_id_list(int type,FILE* ofile)//Êä³öIDÁÐ±í
-{
-    int ptr,kind = 0;
-    char pad_str[STRING_MAX] = "\0";   
-    char temp_str[STRING_MAX] = "\0";
-    memset(temp_str,'\0',sizeof(temp_str));
-    pop();
-    if (strcmp(top_str,"standard") == 0)
-        kind = 0;
-    else if (strcmp(top_str,"array") == 0) 
-        kind = 1;
-    else if (strcmp(top_str,"record") == 0)
-        kind = 2;
-    if (kind != 2)
-        pop();
-    if (strcmp(top_str,"float") == 0)
-        strcpy(temp_str,"float ");
-    else if (strcmp(top_str,"int") == 0)
-        strcpy(temp_str,"int ");
-    fprintf(ofile,temp_str);
-    if (type == 0)
-    {
-        strcpy(temp_str,"\0");
-        if (kind == 1)
-        {
-            strcpy(pad_str,"[");
-            pop();
-            num1 = atoi(top_str);
-            pop();
-            num2 = atoi(top_str);
-            itoa(num1 + 1, pad_str + 1, 10);
-            strcat(pad_str,"]");
-        }
-    }
-    if (type == 1)
-    {
-        if (kind == 1)
-        {
-            pop();
-            num1 = atoi(top_str);
-            pop();
-            num2 = atoi(top_str);
-            strcat(temp_str,"*"); 
-            fprintf(ofile,"*");
-        }
-    }     
-    //ÔÚCÊä³öÎÄ¼þÖÐÊä³öIDÃû      
-    fprintf(ofile,l_stack[l_top-1]->table[atoi(stack[cur_top])].name);
-    //ÎªIDµÄtype¸³Öµ
-    strcpy(l_stack[l_top-1]->table[atoi(stack[cur_top])].type,type_expression);
-    
-    //Ïò¼ÇÂ¼½á¹¹µÄÀàÐÍ±í´ïÊ½×Ö·û´®type_exp_rÐ´Èë
-    strcpy(type_exp_r,l_stack[l_top-1]->table[atoi(stack[cur_top])].name);
-    strcat(type_exp_r,"*");
-    strcat(type_exp_r,type_expression);
-    
-    //Ïòº¯Êý¼°¹ý³ÌµÄÀàÐÍ±í´ïÊ½×Ö·û´®type_exp_fpÐ´Èë
-    strcpy(type_exp_fp,type_expression);
-    
-    fprintf(ofile,pad_str);
-    
-    for (ptr = cur_top + 1; ptr < top; ptr ++)
-    {
-        fprintf(ofile,", ");
-        fprintf(ofile,temp_str);
-        //ÔÚÊä³öÎÄ¼þÖÐÊä³öIDÃû
-        fprintf(ofile,l_stack[l_top-1]->table[atoi(stack[ptr])].name);
-        //ÎªIDµÄtype¸³Öµ    
-        strcpy(l_stack[l_top-1]->table[atoi(stack[ptr])].type,type_expression);
-        fprintf(ofile,pad_str);
-        
-        //Ïò¼ÇÂ¼½á¹¹µÄÀàÐÍ±í´ïÊ½×Ö·û´®type_exp_rÐ´Èë
-        strcat(type_exp_r," ");
-        strcat(type_exp_r,l_stack[l_top-1]->table[atoi(stack[ptr])].name);
-        strcat(type_exp_r,"*");
-        strcat(type_exp_r,type_expression);
-        
-        //Ïòº¯Êý¼°¹ý³ÌµÄÀàÐÍ±í´ïÊ½×Ö·û´®type_exp_fpÐ´Èë
-        strcat(type_exp_fp," ");
-        strcat(type_exp_fp,type_expression);
-    }
-    while (top > cur_top)
-        pop();
-    return 0;
-}
-
-/*===============================================*/
-
-
-/*·ûºÅ±íÕ»Ïà¹Øº¯Êý===============================*/
-
-int l_push(List* list)//Èë·ûºÅ±íÕ»
-{
-    if (l_top < STACK_SIZE)
-    {
-        l_stack[l_top ++] = list;
-        return 1;
-    }
-    else
-        printf("The List Stack is FULL!\n");
-    return 0;
-}
-int l_pop(void)//³ö·ûºÅ±íÕ»
-{
-    if (l_top > 0)
-    {
-        l_top_str = l_stack[--l_top];
-        l_stack[l_top] = (List*)NULL;
-        return 1;
-    }
-    else
-        printf("The List Stack is EMPTY!\n");
-    return 0;
-}
-/*===============================================*/
-
-
-
-int initialList(List* list)//·ûºÅ±í³õÊ¼»¯º¯Êý
-{
-     int i;
-     list->top = 0;
-     for (i = 0; i <= LIST_SIZE - 1; i ++)
-     {
-         memset(list->table[i].name,'\0',sizeof(list->table[i].name));
-         memset(list->table[i].type,'\0',sizeof(list->table[i].type));
-         list->table[i].define = 0;
-         list->table[i].atop = 0;
-         memset(list->table[i].appear,0,sizeof(list->table[i].appear));
-         list->table[i].list = NULL;
-     }
-     return 0;
-}
-
-
-/*·ûºÅ±íÏà¹Øº¯Êý=================================*/
-
-
-int insert(char* id)//²åÈë·ûºÅ±í²Ù×÷¡£Èô¸Ã±êÊ¶·ûÒÑ´æÔÚ£¬Ôò·µ»Ø-1£¬ÌáÊ¾´æÔÚÖØ¶¨Òå´íÎó£»·ñÔò½«¸Ã±êÊ¶·û²åÈë·ûºÅ±í
-{
-    int i;
-    for (i = 0; i <= l_stack[l_top - 1]->top - 1; i ++)
-    {
-        if (strcmp(l_stack[l_top - 1]->table[i].name,id) == 0)
-            return -1;
-    }
-    strcpy (l_stack[l_top - 1]->table[l_stack[l_top - 1]->top].name, id);
-    l_stack[l_top - 1]->table[l_stack[l_top - 1]->top].define = yylineno;
-    l_stack[l_top - 1]->top ++;
-    return l_stack[l_top - 1]->top - 1;
-}
-
-
-int search(char* id)//ËÑË÷·ûºÅ±í²Ù×÷£¬Èô¸Ã±êÊ¶·ûÔÚµ±Ç°·ûºÅ±íÖÐ´æÔÚ£¬Ôò·µ»ØÆä±àºÅ£»·ñÔò·µ»Ø-1£¬²¢ÌáÊ¾´íÎó
-{
-    int i,j,flag = 0;
-    for (i = 0; i <= l_stack[l_top - 1]->top - 1; i ++)
-    {
-        if (strcmp(l_stack[l_top - 1]->table[i].name,id) == 0)
-        {
-            for (j = 0; j <= l_stack[l_top - 1]->table[i].atop; j ++)
-                if (l_stack[l_top - 1]->table[i].appear[j] == yylineno)
-                {
-                     flag = 1;                         
-                     break;
-                }
-            if (flag == 0)     
-                l_stack[l_top - 1]->table[i].appear[l_stack[l_top - 1]->table[i].atop ++] = yylineno;                
-            return i;
-        }
-    }
-    return -1;
-}
-/*===============================================*/
-
-int exp_check(char* des,char* src,int start,int end)//×Ö·û´®±È½Ïº¯Êý£¬ÓÃÓÚ¼ì²éÀàÐÍ±í´ïÊ½
-{
-    int i,j;
-    for (i = start, j = 0; i <= end ; i++)
-    {
-        if (des[i] != src[i - start])
-            return 0;
-    }
-    return 1;
-}
-int para_number(char* type_expression)//Í³¼Æº¯Êý¼°¹ý³ÌÀàÐÍ±í´ïÊ½ÖÐµÄ²ÎÊý¸öÊý
-{
-    int i,count = 0;
-    for (i = 0; i <= strlen(type_expression) - 1 && type_expression[i] != '-'; i ++)
-    {
-        if (exp_check(type_expression,"int",i,i+2))
-        {
-            count ++;
-        }
-        else if (exp_check(type_expression,"float",i,i+4))
-        {
-            count ++;
-        }
-    }
-    return count;
-}
-
-int get_range_number(char* type_expression)//»ñÈ¡Êý×éÀàÐÍ±í´ïÊ½ÖÐµÄ½Ç±ê·¶Î§£¬·Ö±ð±£´æÔÚnum1¡¢num2ÖÐ£¬Í¬Ê±½«Êý×éÀàÐÍ±£´æÔÚtype_exp_aÖÐ
-{
-    int i,j;
-    char num_temp[STRING_MAX];
-    memset(num_temp,'\0',sizeof(num_temp)); 
-    for (i = 6 , j = 0;(i <= strlen(type_expression) - 1) && (type_expression[i] != '.'); i ++)
-    {
-        num_temp[j ++] = type_expression[i];
-    }
-    num1 = atoi(num_temp);
-    memset(num_temp,'\0',sizeof(num_temp));    
-    for (i = i + 2, j = 0;( i <= strlen(type_expression) - 1) && (type_expression[i] != ','); i ++)
-    {
-        num_temp[j ++] = type_expression[i];
-    }
-    num2 = atoi(num_temp);
-    memset(type_exp_a,'\0',sizeof(type_exp_a));
-    for (i = i + 1, j = 0; ( i <= strlen(type_expression) - 1) && (type_expression[i] != ')'); i ++)
-        type_exp_a[j ++] = type_expression[i];
-    return 0;
-}
-
-
-void yyerror(void)
-{
-    printf("\nLine %d: Error: An error occured.Translation aborted\n",yylineno);
-}
+                       push("int");//å°†é”™è¯¯å¼•ç”¨çš„è®°å½

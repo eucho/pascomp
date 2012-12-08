@@ -12,9 +12,3 @@ begin
   read(x,y);
   write(gtcomdiv(x,y))
 end.
-program test(input);
-var x, y:integer
-begin
-	x := 1
-	y := 2
-end.
